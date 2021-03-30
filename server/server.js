@@ -28,28 +28,12 @@ app.use(express.json());
 
 // require APIs
 const productRoutes = require("./routes/product");
+const categoryRoutes = require("./routes/category");
+const ownerRoutes = require("./routes/owner");
+
 app.use("/api", productRoutes);
-
-//GET - Retrieve data from the server
-app.get("/", (req, res) => {
-  res.json("Hello amazon clone");
-});
-
-// POST - send data from frontend to backend
-app.post("/", (req, res) => {
-  let user = new User();
-  user.name = req.body.name;
-  user.email = req.body.email;
-  user.password = req.body.name;
-
-  user.save((err) => {
-    if (err) {
-      res.json(err);
-    } else {
-      res.json("successfully saved");
-    }
-  });
-});
+app.use("/api", categoryRoutes);
+app.use("/api", ownerRoutes);
 
 app.listen(3000, (err) => {
   if (err) {
