@@ -1,14 +1,17 @@
-const router = require("express").Router();
-const Product = require("../models/product");
+const router = require('express').Router();
+const Product = require('../models/product');
 
-const upload = require("../middlewares/upload-photo");
+const upload = require('../middlewares/upload-photo');
 
 // @description    create a product
 // @route          POST /api/products
 // @access         Private/Admin
-router.post("/products", upload.single("photo"), async (req, res) => {
+router.post('/products', upload.single('photo'), async (req, res) => {
   try {
     let product = new Product();
+    product.ownereID = req.body.ownerID;
+    product.categoryID = req.body.categoryID;
+    product.price = req.body.price;
     product.title = req.body.title;
     product.description = req.body.description;
     product.photo = req.file.location;
@@ -18,7 +21,7 @@ router.post("/products", upload.single("photo"), async (req, res) => {
 
     res.json({
       status: true,
-      message: "Successfully saved",
+      message: 'Successfully saved',
     });
   } catch (err) {
     res.status(500).json({
@@ -31,7 +34,7 @@ router.post("/products", upload.single("photo"), async (req, res) => {
 // @description    Fetch all products
 // @route          GET /api/products
 // @access         Public
-router.get("/products", async (req, res) => {
+router.get('/products', async (req, res) => {
   try {
     let products = await Product.find();
     res.json({
@@ -49,7 +52,7 @@ router.get("/products", async (req, res) => {
 // @description    Fetch a product
 // @route          GET /api/products/:id
 // @access         Public
-router.get("/products/:id", async (req, res) => {
+router.get('/products/:id', async (req, res) => {
   try {
     let product = await Product.findOne({ _id: req.params.id });
     res.json({
@@ -67,7 +70,7 @@ router.get("/products/:id", async (req, res) => {
 // @description    Update a product
 // @route          PUT /api/products/:id
 // @access         Private/Admin
-router.put("/products/:id", upload.single("photo"), async (req, res) => {
+router.put('/products/:id', upload.single('photo'), async (req, res) => {
   try {
     let product = await Product.findOneAndUpdate(
       { _id: req.params.id },
@@ -99,14 +102,14 @@ router.put("/products/:id", upload.single("photo"), async (req, res) => {
 // @description    Delete a product
 // @route          DELETE /api/products/:id
 // @access         Private/Admin
-router.delete("/products/:id", async (req, res) => {
+router.delete('/products/:id', async (req, res) => {
   try {
     let deletedProduct = await Product.findOneAndDelete({ _id: req.params.id });
 
     if (deletedProduct) {
       res.json({
         status: true,
-        message: "Successfully deleted",
+        message: 'Successfully deleted',
       });
     }
   } catch (err) {
