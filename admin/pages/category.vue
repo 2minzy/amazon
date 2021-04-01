@@ -25,8 +25,12 @@
             </div>
           </form>
           <br />
-          <ul class="list-group-item">
-            <li v-for="category in categories" :key="category._id">
+          <ul class="list-group">
+            <li
+              v-for="category in categories"
+              :key="category._id"
+              class="list-group-item"
+            >
               {{ category.type }}
             </li>
           </ul>

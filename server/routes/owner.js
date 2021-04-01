@@ -1,20 +1,21 @@
-const router = require("express").Router();
-const Owner = require("../models/owner");
+const router = require('express').Router();
+const Owner = require('../models/owner');
+const upload = require('../middlewares/upload-photo');
 
 // @description    Create an owner
 // @route          POST /api/owners
 // @access         Private/Admin
-router.post("/owners", async (req, res) => {
+router.post('/owners', upload.single('photo'), async (req, res) => {
   try {
     const owner = new Owner();
     owner.name = req.body.name;
     owner.about = req.body.about;
-
+    owner.photo = req.file.location;
     await owner.save();
 
     res.json({
       success: true,
-      message: "Successfully created a new owner",
+      message: 'Successfully created a new owner',
     });
   } catch (err) {
     res.status(500).json({
@@ -27,7 +28,7 @@ router.post("/owners", async (req, res) => {
 // @description    Fetch all owner
 // @route          GET /api/owners
 // @access         Private/Admin
-router.get("/owners", async (req, res) => {
+router.get('/owners', async (req, res) => {
   try {
     let owners = await Owner.find();
     res.json({
